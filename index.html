@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RETRO SOUND — Old School Retro Sound</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --white:#ffffff;
+    --blush:#ffe3ea;
+    --pink-wash:#ffc9d7;
+    --hot-pink:#e4275e;
+    --crimson:#ff3355;
+    --deep-red:#9c1b3e;
+    --deep-red-2:#7a1230;
+    --ink:#3a0f1e;
+    --plate:#fff6f8;
+    --plate-shadow:#f0c7d2;
+    --led:#ff2e4d;
+    --focus:#ffffff;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    font-family:'Space Mono', monospace;
+    color:var(--ink);
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 20% 15%, #ffd6e1 0%, transparent 45%),
+      radial-gradient(circle at 85% 80%, #ffb9cb 0%, transparent 50%),
+      linear-gradient(160deg, var(--blush) 0%, var(--pink-wash) 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+
+  button{font-family:inherit;}
+  button:focus-visible, input:focus-visible, label:focus-visible{
+    outline:3px solid var(--deep-red);
+    outline-offset:3px;
+  }
+
+  .screen{width:100%;display:flex;flex-direction:column;align-items:center;}
+  [hidden]{display:none !important;}
+
+  /* ---------- LOGIN ---------- */
+  .login-screen{ min-height:70vh; justify-content:center; }
+  .lock-unit{
+    width:100%;
+    max-width:360px;
+  }
+  .lock-plate{
+    background:linear-gradient(155deg, var(--hot-pink), var(--deep-red) 75%);
+    border-radius:26px;
+    padding:34px 28px 30px;
+    box-shadow:
+      0 22px 40px -14px rgba(122,18,48,0.55),
+      inset 0 2px 0 rgba(255,255,255,0.35),
+      inset 0 -18px 30px rgba(0,0,0,0.18);
+    position:relative;
+    overflow:hidden;
+    text-align:center;
+  }
+  .lock-plate::before{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(120deg, rgba(255,255,255,0.28) 0%, transparent 35%);
+    pointer-events:none;
+  }
+  .brand-eyebrow{
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    letter-spacing:3px;
+    font-size:12px;
+    color:var(--blush);
+    opacity:0.85;
+  }
+  .lock-title{
+    font-family:'Fredoka',sans-serif;
+    font-weight:700;
+    font-size:30px;
+    margin:6px 0 4px;
+    color:var(--white);
+    letter-spacing:1px;
+  }
+  .lock-sub{
+    font-size:12px;
+    color:var(--blush);
+    margin:0 0 22px;
+    opacity:0.9;
+  }
+  .pw-row{
+    display:flex;
+    gap:8px;
+    background:var(--plate);
+    padding:8px;
+    border-radius:14px;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .pw-input{
+    flex:1;
+    border:none;
+    background:transparent;
+    font-family:'Space Mono',monospace;
+    font-size:16px;
+    letter-spacing:4px;
+    color:var(--ink);
+    padding:10px 8px;
+    min-width:0;
+  }
+  .pw-input::placeholder{color:#c98ea1;}
+  .btn-enter{
+    border:none;
+    background:var(--ink);
+    color:var(--blush);
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    padding:0 16px;
+    border-radius:9px;
+    cursor:pointer;
+    transition:transform .12s ease, background .12s ease;
+  }
+  .btn-enter:hover{background:var(--deep-red-2);}
+  .btn-enter:active{transform:scale(0.94);}
+  .login-error{
+    margin-top:14px;
+    font-size:11px;
+    letter-spacing:1px;
+    color:#fff0f3;
+    background:rgba(0,0,0,0.18);
+    border-radius:8px;
+    padding:8px 10px;
+  }
+  @keyframes shake{
+    10%,90%{transform:translateX(-1px)}
+    20%,80%{transform:translateX(2px)}
+    30%,50%,70%{transform:translateX(-4px)}
+    40%,60%{transform:translateX(4px)}
+  }
+  .shake{animation:shake .5s;}
+
+  /* ---------- RECORDER ---------- */
+  .recorder-screen{ gap:26px; }
+
+  .recorder-shell{
+    position:relative;
+    width:100%;
+    max-width:340px;
+    padding-top:22px;
+  }
+
+  .strap-left, .strap-right{
+    position:absolute;
+    top:0;
+    width:34px;
+    height:34px;
+    border:7px solid var(--deep-red-2);
+    border-radius:50%;
+    background:transparent;
+  }
+  .strap-left{ left:26px; }
+  .strap-right{ right:26px; }
+
+  .recorder-body{
+    position:relative;
+    background:linear-gradient(160deg, var(--hot-pink) 0%, var(--deep-red) 60%, var(--deep-red-2) 100%);
+    border-radius:30px;
+    padding:20px 20px 26px;
+    box-shadow:
+      0 28px 50px -18px rgba(122,18,48,0.6),
+      inset 0 2px 0 rgba(255,255,255,0.35),
+      inset 0 -22px 34px rgba(0,0,0,0.2);
+    overflow:hidden;
+  }
+  .recorder-body::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(115deg, rgba(255,255,255,0.3) 0%, transparent 30%);
+    pointer-events:none;
+  }
+
+  .top-ridges{
+    display:flex;
+    gap:8px;
+    margin:2px 0 16px 2px;
+  }
+  .top-ridges span{
+    width:26px;height:9px;
+    background:var(--deep-red-2);
+    border-radius:5px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.25);
+  }
+
+  .brand-plaque{ text-align:center; margin-bottom:14px; }
+  .brand-title{
+    font-family:'Fredoka',sans-serif;
+    font-weight:700;
+    font-size:26px;
+    letter-spacing:2px;
+    color:var(--white);
+    text-shadow:0 2px 0 rgba(0,0,0,0.15);
+  }
+  .brand-sub{
+    font-size:9px;
+    letter-spacing:2px;
+    color:var(--blush);
+    margin-top:2px;
+    opacity:0.9;
+  }
+
+  .cassette-window{
+    position:relative;
+    background:var(--plate);
+    border-radius:18px;
+    height:112px;
+    box-shadow:inset 0 3px 10px rgba(0,0,0,0.22), inset 0 0 0 6px rgba(255,255,255,0.4);
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+    padding:0 20px;
+  }
+  .tape-line{
+    position:absolute;
+    left:26%; right:26%; top:50%;
+    height:2px;
+    background:var(--ink);
+    opacity:0.55;
+    transform:translateY(-1px);
+  }
+  .reel{
+    width:64px;height:64px;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 50% 50%, var(--plate) 0 14%, var(--ink) 15% 100%);
+    box-shadow:0 2px 4px rgba(0,0,0,0.35);
+    position:relative;
+    transition:transform .2s linear;
+  }
+  .reel-hub{
+    position:absolute; inset:0;
+    border-radius:50%;
+  }
+  .reel-hub::before, .reel-hub::after,
+  .reel span{
+    content:"";
+    position:absolute;
+    top:6px; left:50%;
+    width:5px; height:12px;
+    margin-left:-2.5px;
+    background:var(--plate);
+    border-radius:2px;
+  }
+  .reel span:nth-child(1){transform:rotate(0deg) translateY(0);}
+  .reel span:nth-child(2){transform:rotate(60deg);}
+  .reel span:nth-child(3){transform:rotate(120deg);}
+  .reel span:nth-child(4){transform:rotate(180deg);}
+  .reel span:nth-child(5){transform:rotate(240deg);}
+  .reel span:nth-child(6){transform:rotate(300deg);}
+  .reel span{transform-origin:16px 26px;}
+
+  .reel.spinning{ animation:spin 1.1s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .lcd-readout{
+    margin-top:14px;
+    background:var(--ink);
+    color:var(--led);
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    letter-spacing:2px;
+    text-align:center;
+    padding:9px 10px;
+    border-radius:8px;
+    box-shadow:inset 0 2px 5px rgba(0,0,0,0.5);
+    text-shadow:0 0 6px rgba(255,46,77,0.65);
+  }
+
+  .lower-plaque{
+    text-align:center;
+    background:var(--plate);
+    color:var(--deep-red);
+    font-size:9px;
+    letter-spacing:2px;
+    font-weight:700;
+    padding:8px;
+    border-radius:10px;
+    margin-top:14px;
+    box-shadow:inset 0 0 0 3px var(--plate-shadow);
+  }
+
+  .controls-row{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    margin-top:18px;
+  }
+  .ctrl-btn{
+    border:none;
+    cursor:pointer;
+    color:var(--white);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 0 rgba(0,0,0,0.25), 0 8px 14px rgba(0,0,0,0.3);
+    transition:transform .1s ease, box-shadow .1s ease;
+    font-size:18px;
+  }
+  .ctrl-btn:active{ transform:translateY(4px); box-shadow:0 2px 0 rgba(0,0,0,0.25); }
+  .play-btn{
+    width:64px;height:64px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #ff6b86, var(--ink) 120%);
+  }
+  .stop-btn{
+    width:50px;height:50px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--blush), var(--deep-red-2) 120%);
+    align-self:center;
+    font-size:14px;
+  }
+
+  /* ---------- LOADER CARD ---------- */
+  .loader-card{
+    width:100%;
+    max-width:340px;
+    background:var(--white);
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 14px 30px -14px rgba(122,18,48,0.35);
+  }
+  .loader-title{
+    font-family:'Fredoka',sans-serif;
+    font-size:16px;
+    margin:0 0 4px;
+    color:var(--deep-red);
+  }
+  .loader-hint{
+    font-size:11px;
+    line-height:1.5;
+    color:#8a5462;
+    margin:0 0 14px;
+  }
+  .slots-grid{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:8px;
+  }
+  .slot{
+    aspect-ratio:1;
+    border-radius:9px;
+    background:var(--blush);
+    color:var(--deep-red);
+    font-size:11px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    box-shadow:inset 0 0 0 1px var(--plate-shadow);
+  }
+  .slot.filled{
+    background:var(--hot-pink);
+    color:var(--white);
+  }
+  .slot.active{
+    background:var(--deep-red);
+    color:var(--white);
+    box-shadow:0 0 0 2px var(--crimson);
+  }
+  .slot .dot{
+    position:absolute;
+    bottom:3px; right:3px;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--led);
+    display:none;
+  }
+  .slot.filled .dot{ display:block; }
+
+  .logout-link{
+    margin-top:4px;
+    background:none;
+    border:none;
+    color:var(--deep-red);
+    font-size:11px;
+    letter-spacing:1px;
+    text-decoration:underline;
+    cursor:pointer;
+    padding:6px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .reel.spinning{ animation:none; }
+    .lcd-readout{ transition:none; }
+  }
+
+  @media (max-width:380px){
+    .slots-grid{ grid-template-columns:repeat(5,1fr); }
+    .brand-title{ font-size:22px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- LOGIN VIEW -->
+  <section id="loginView" class="screen login-screen">
+    <div class="lock-unit">
+      <div class="lock-plate" id="lockPlate">
+        <div class="brand-eyebrow">RETRO SOUND</div>
+        <h1 class="lock-title">TAPE LOCKED</h1>
+        <p class="lock-sub">insert password cassette to continue</p>
+        <div class="pw-row">
+          <input type="password" id="pwInput" class="pw-input" placeholder="••••••••" autocomplete="off" />
+          <button id="unlockBtn" class="btn-enter">ENTER ▶</button>
+        </div>
+        <div id="loginError" class="login-error" hidden>WRONG PASSWORD — TRY AGAIN</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECORDER VIEW -->
+  <section id="recorderView" class="screen recorder-screen" hidden>
+
+    <div class="recorder-shell">
+      <div class="strap-left"></div>
+      <div class="strap-right"></div>
+
+      <div class="recorder-body">
+        <div class="top-ridges">
+          <span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="brand-plaque">
+          <div class="brand-title">RETRO SOUND</div>
+          <div class="brand-sub">OLD SCHOOL RETRO SOUND</div>
+        </div>
+
+        <div class="cassette-window">
+          <div class="reel" id="reelLeft"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="tape-line"></div>
+          <div class="reel" id="reelRight"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+
+        <div class="lcd-readout" id="lcdReadout">STANDBY</div>
+
+        <div class="lower-plaque">OLD SCHOOL RETRO SOUND</div>
+
+        <div class="controls-row">
+          <button id="playBtn" class="ctrl-btn play-btn" title="Play a random tape">▶</button>
+          <button id="stopBtn" class="ctrl-btn stop-btn" title="Stop">■</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="loader-card">
+      <h2 class="loader-title">Your tapes</h2>
+      <p class="loader-hint">Tapes are wired up directly in the code — no upload button here. Open the HTML file, find the <strong>TRACKS</strong> list near the top of the &lt;script&gt;, and put a file path in slots 1–15. Press ▶ to play a random loaded slot.</p>
+      <div class="slots-grid" id="slotsGrid"></div>
+      <button class="logout-link" id="logoutBtn">◀ lock tape deck</button>
+    </div>
+  </section>
+
+  <audio id="player"></audio>
+
+<script>
+(function(){
+
+  /* ============ Self-contained SHA-256 (no external libraries, works offline / file://) ============ */
+  function sha256(ascii) {
+    function rightRotate(value, amount) {
+      return (value>>>amount) | (value<<(32 - amount));
+    }
+    var mathPow = Math.pow;
+    var maxWord = mathPow(2, 32);
+    var i, j;
+    var result = '';
+
+    var words = [];
+    var asciiBitLength = ascii.length*8;
+
+    var hash = sha256.h = sha256.h || [];
+    var k = sha256.k = sha256.k || [];
+    var primeCounter = k.length;
+
+    var isComposite = {};
+    for (var candidate = 2; primeCounter < 64; candidate++) {
+      if (!isComposite[candidate]) {
+        for (i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+        hash[primeCounter] = (mathPow(candidate, .5)*maxWord)|0;
+        k[primeCounter++] = (mathPow(candidate, 1/3)*maxWord)|0;
+      }
+    }
+
+    ascii += '\x80';
+    while (ascii.length%64 - 56) ascii += '\x00';
+    for (i = 0; i < ascii.length; i++) {
+      j = ascii.charCodeAt(i);
+      if (j>>8) return null; // ASCII only
+      words[i>>2] |= j << ((3 - i)%4)*8;
+    }
+    words[words.length] = ((asciiBitLength/maxWord)|0);
+    words[words.length] = (asciiBitLength);
+
+    for (j = 0; j < words.length;) {
+      var w = words.slice(j, j += 16);
+      var oldHash = hash;
+      hash = hash.slice(0, 8);
+
+      for (i = 0; i < 64; i++) {
+        var w15 = w[i - 15], w2 = w[i - 2];
+        var a = hash[0], e = hash[4];
+        var temp1 = hash[7]
+          + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25))
+          + ((e&hash[5])^((~e)&hash[6]))
+          + k[i]
+          + (w[i] = (i < 16) ? w[i] : (
+              w[i - 16]
+              + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3))
+              + w[i - 7]
+              + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10))
+            )|0
+          );
+        var temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22))
+          + ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+
+        hash = [(temp1 + temp2)|0].concat(hash);
+        hash[4] = (hash[4] + temp1)|0;
+      }
+
+      for (i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i])|0;
+    }
+
+    for (i = 0; i < 8; i++) {
+      for (j = 3; j + 1; j--) {
+        var b = (hash[i]>>(j*8))&255;
+        result += ((b < 16) ? 0 : '') + b.toString(16);
+      }
+    }
+    return result;
+  }
+
+  // Hardcoded, hashed credential — the plaintext password is never stored in the code.
+  // This hash decodes/verifies entirely client-side; it is a UI gate, not real security.
+  var CREDENTIAL_HASH = "8faf47a77b54e1a4c39e617d9894ac8f349fb06c0c67fc81954dd338a3036cb8";
+
+  /* ============ UI sound effects (synthesized, no audio files needed) ============ */
+  var audioCtx = null;
+  function getAudioCtx(){
+    if (!audioCtx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AC();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playClickSound(){
+    var ctx = getAudioCtx();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(1100, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 0.05);
+    gain.gain.setValueAtTime(0.22, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.06);
+  }
+
+  // A whirring "tape winding up" sound, played while the reels spin up before playback.
+  var windNodes = null;
+  function startWindSound(durationSec){
+    var ctx = getAudioCtx();
+    var bufferSize = Math.floor(ctx.sampleRate * durationSec);
+    var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    var data = buffer.getChannelData(0);
+    for (var i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1);
+
+    var noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    var bandpass = ctx.createBiquadFilter();
+    bandpass.type = 'bandpass';
+    bandpass.frequency.value = 1000;
+    bandpass.Q.value = 5;
+
+    var lfo = ctx.createOscillator();
+    lfo.frequency.value = 7;
+    var lfoGain = ctx.createGain();
+    lfoGain.gain.value = 350;
+    lfo.connect(lfoGain);
+    lfoGain.connect(bandpass.frequency);
+
+    var gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime + durationSec - 0.25);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + durationSec);
+
+    noise.connect(bandpass);
+    bandpass.connect(gain);
+    gain.connect(ctx.destination);
+
+    noise.start();
+    lfo.start();
+    noise.stop(ctx.currentTime + durationSec);
+    lfo.stop(ctx.currentTime + durationSec);
+
+    windNodes = { noise: noise, lfo: lfo, gain: gain };
+  }
+  function stopWindSound(){
+    if (!windNodes) return;
+    var ctx = getAudioCtx();
+    try {
+      windNodes.gain.gain.cancelScheduledValues(ctx.currentTime);
+      windNodes.gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.08);
+      windNodes.noise.stop(ctx.currentTime + 0.1);
+      windNodes.lfo.stop(ctx.currentTime + 0.1);
+    } catch (e) { /* already stopped */ }
+    windNodes = null;
+  }
+
+  // Attach a click sound to every button in the UI.
+  document.querySelectorAll('button').forEach(function(btn){
+    btn.addEventListener('click', playClickSound);
+  });
+
+  var loginView = document.getElementById('loginView');
+  var recorderView = document.getElementById('recorderView');
+  var pwInput = document.getElementById('pwInput');
+  var unlockBtn = document.getElementById('unlockBtn');
+  var loginError = document.getElementById('loginError');
+  var lockPlate = document.getElementById('lockPlate');
+
+  function attemptUnlock(){
+    var val = pwInput.value || '';
+    var hashed = sha256(val);
+    if (hashed && hashed === CREDENTIAL_HASH) {
+      loginError.hidden = true;
+      loginView.hidden = true;
+      recorderView.hidden = false;
+      pwInput.value = '';
+    } else {
+      loginError.hidden = false;
+      lockPlate.classList.remove('shake');
+      void lockPlate.offsetWidth; // restart animation
+      lockPlate.classList.add('shake');
+      pwInput.value = '';
+      pwInput.focus();
+    }
+  }
+
+  unlockBtn.addEventListener('click', attemptUnlock);
+  pwInput.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') attemptUnlock();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', function(){
+    recorderView.hidden = true;
+    loginView.hidden = false;
+    pwInput.focus();
+  });
+
+  /* ============================================================
+     ADD YOUR OWN AUDIO FILES HERE — no upload button needed.
+     Put your audio files somewhere next to this HTML file
+     (e.g. a folder named "audio"), then list each file's path
+     below. Slots are numbered 1–15; leave a slot as "" (empty
+     string) if you don't have a file for it yet.
+
+     Example:
+       1: "audio/1.mp3",
+       2: "audio/2.mp3",
+     You can also use a full URL, e.g. "https://example.com/2.mp3"
+     ============================================================ */
+  var TRACKS = {
+    1:  "",
+    2:  "",
+    3:  "",
+    4:  "",
+    5:  "",
+    6:  "",
+    7:  "",
+    8:  "",
+    9:  "",
+    10: "",
+    11: "",
+    12: "",
+    13: "",
+    14: "",
+    15: ""
+  };
+
+  /* ============ Recorder logic ============ */
+  var TOTAL_SLOTS = 15;
+  var slotsGrid = document.getElementById('slotsGrid');
+  var playBtn = document.getElementById('playBtn');
+  var stopBtn = document.getElementById('stopBtn');
+  var lcd = document.getElementById('lcdReadout');
+  var reelLeft = document.getElementById('reelLeft');
+  var reelRight = document.getElementById('reelRight');
+  var player = document.getElementById('player');
+  var activeSlotNum = null;
+  var windTimeout = null;
+  var isBusy = false; // true while winding up or playing
+
+  function buildSlots(){
+    slotsGrid.innerHTML = '';
+    for (var n = 1; n <= TOTAL_SLOTS; n++) {
+      var el = document.createElement('div');
+      el.className = 'slot';
+      el.id = 'slot-' + n;
+      el.innerHTML = n + '<span class="dot"></span>';
+      slotsGrid.appendChild(el);
+    }
+  }
+  buildSlots();
+
+  function refreshSlot(n){
+    var el = document.getElementById('slot-' + n);
+    if (!el) return;
+    el.classList.toggle('filled', !!TRACKS[n]);
+    el.classList.toggle('active', activeSlotNum === n);
+  }
+
+  for (var s = 1; s <= TOTAL_SLOTS; s++) refreshSlot(s);
+
+  var WIND_UP_MS = 3000; // delay before playback so the "spinning up" sound/animation can play
+
+  function setSpinning(on){
+    reelLeft.classList.toggle('spinning', on);
+    reelRight.classList.toggle('spinning', on);
+  }
+
+  function setBusy(on){
+    isBusy = on;
+    playBtn.disabled = on;
+    playBtn.style.opacity = on ? '0.6' : '1';
+    playBtn.style.cursor = on ? 'default' : 'pointer';
+  }
+
+  function stopPlayback(resetLcd){
+    if (windTimeout) { clearTimeout(windTimeout); windTimeout = null; }
+    stopWindSound();
+    player.pause();
+    player.currentTime = 0;
+    setSpinning(false);
+    setBusy(false);
+    if (activeSlotNum !== null) {
+      var prev = activeSlotNum;
+      activeSlotNum = null;
+      refreshSlot(prev);
+    }
+    if (resetLcd !== false) lcd.textContent = 'STANDBY';
+  }
+
+  playBtn.addEventListener('click', function(){
+    if (isBusy) return;
+    var available = Object.keys(TRACKS).filter(function(n){ return !!TRACKS[n]; }).map(Number);
+    if (available.length === 0) {
+      lcd.textContent = 'NO TAPES LOADED';
+      return;
+    }
+    var pick = available[Math.floor(Math.random() * available.length)];
+    var prevActive = activeSlotNum;
+    activeSlotNum = pick;
+    if (prevActive !== null) refreshSlot(prevActive);
+    refreshSlot(pick);
+
+    setBusy(true);
+    setSpinning(true);
+    lcd.textContent = 'REWINDING…';
+    startWindSound(WIND_UP_MS / 1000);
+
+    windTimeout = setTimeout(function(){
+      windTimeout = null;
+      player.src = TRACKS[pick];
+      player.play().catch(function(){
+        lcd.textContent = 'TAP ▶ AGAIN TO PLAY';
+        setBusy(false);
+      });
+      lcd.textContent = 'TRACK ' + (pick < 10 ? '0' + pick : pick) + ' ▶ PLAYING';
+    }, WIND_UP_MS);
+  });
+
+  stopBtn.addEventListener('click', function(){ stopPlayback(true); });
+
+  player.addEventListener('ended', function(){ stopPlayback(true); });
+  player.addEventListener('error', function(){
+    if (player.src) {
+      stopPlayback(false);
+      lcd.textContent = 'TAPE ERROR — CHECK FILE PATH';
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
