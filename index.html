@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RETRO SOUND — Old School Retro Sound</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- LOGIN VIEW -->
+  <section id="loginView" class="screen login-screen">
+    <div class="lock-unit">
+      <div class="lock-plate" id="lockPlate">
+        <div class="brand-eyebrow">RETRO SOUND</div>
+        <h1 class="lock-title">TAPE LOCKED</h1>
+        <p class="lock-sub">insert password cassette to continue</p>
+        <div class="pw-row">
+          <input type="password" id="pwInput" class="pw-input" placeholder="••••••••" autocomplete="off" />
+          <button id="unlockBtn" class="btn-enter">ENTER ▶</button>
+        </div>
+        <div id="loginError" class="login-error" hidden>WRONG PASSWORD — TRY AGAIN</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECORDER VIEW -->
+  <section id="recorderView" class="screen recorder-screen" hidden>
+
+    <div class="note-panel">
+      <p class="note-text">if you miss me, just play it or something ♡</p>
+    </div>
+
+    <div class="recorder-shell">
+      <div class="strap-left"></div>
+      <div class="strap-right"></div>
+
+      <div class="recorder-body">
+        <div class="top-ridges">
+          <span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="brand-plaque">
+          <div class="brand-title">RETRO SOUND</div>
+          <div class="brand-sub">OLD SCHOOL RETRO SOUND</div>
+        </div>
+
+        <div class="cassette-window">
+          <div class="reel" id="reelLeft"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="tape-line"></div>
+          <div class="reel" id="reelRight"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+
+        <div class="lcd-readout" id="lcdReadout">STANDBY</div>
+
+        <div class="lower-plaque">OLD SCHOOL RETRO SOUND</div>
+
+        <div class="controls-row">
+          <button id="playBtn" class="ctrl-btn play-btn" title="Play a random tape">▶</button>
+          <button id="stopBtn" class="ctrl-btn stop-btn" title="Stop">■</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="logout-link" id="logoutBtn">◀ lock tape deck</button>
+  </section>
+
+  <audio id="player"></audio>
+
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function (err) {
+          console.log('Service worker registration failed:', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
