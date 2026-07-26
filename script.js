@@ -241,7 +241,7 @@
   var windTimeout = null;
   var isBusy = false; // true while winding up or playing
 
-  var WIND_UP_MS = 3000; // delay before playback so the "spinning up" sound/animation can play
+  var WIND_UP_MS = 1000; // delay before playback so the "spinning up" sound/animation can play
 
   function setSpinning(on){
     reelLeft.classList.toggle('spinning', on);
