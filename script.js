@@ -214,21 +214,21 @@
        2: "audio/2.mp3",
      ============================================================ */
   var TRACKS = {
-    1:  "",
-    2:  "",
-    3:  "",
-    4:  "",
-    5:  "",
-    6:  "",
-    7:  "",
-    8:  "",
-    9:  "",
-    10: "",
-    11: "",
-    12: "",
-    13: "",
-    14: "",
-    15: ""
+    1:  "audio/Maumauuu.mp3",
+    2:  "audio/annoy1.mp3",
+    3:  "audio/song1.mp3",
+    4:  "audio/message1.mp3",
+    5:  "audio/babytalk1.mp3",
+    6:  "audio/compliment.mp3",
+    7:  "audio/hughug.mp3",
+    8:  "audio/patpat.mp3",
+    9:  "audio/kisskiss.mp3",
+    10: "audio/iloveyou.mp3",
+    11: "audio/iloveyousomuch.mp3",
+    12: "audio/imissyou.mp3",
+    13: "audio/randompop.mp3",
+    14: "audio/soglad.mp3",
+    15: "audio/mahal.mp3"
   };
 
   /* ============ Recorder logic ============ */
